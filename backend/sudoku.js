@@ -19,7 +19,8 @@ function isSafe(board, row, col, num) {
   }
   
   function fillGrid(board) {
-    for (let row = 0; row < 9; row++) {
+    // Since the first Row is already filled, we can start from the second row
+    for (let row = 1; row < 9; row++) {
       for (let col = 0; col < 9; col++) {
         if (board[row][col] === 0) {
           const numbers = shuffleArray([1, 2, 3, 4, 5, 6, 7, 8, 9]);
@@ -45,7 +46,9 @@ function isSafe(board, row, col, num) {
   
   function generateSudoku(difficulty = 'easy') {
     const board = Array.from({ length: 9 }, () => Array(9).fill(0));
-  
+  // Take the new Board, and replace the first row with a random permutation of 1-9
+  board[0] = shuffleArray([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  // now when I pass the board to the fillGrid, I can SKIP the first row
     fillGrid(board);
   
     let clues;
@@ -62,11 +65,32 @@ function isSafe(board, row, col, num) {
       default:
         clues = 40;
     }
-  
+    // I feel I need to store the Original Board somewhere, so I can compare the user's input to the original board
+    setOriginalBoard(board);
     removeNumbers(board, 81 - clues);
     return board;
   }
   
+  setOriginalBoard = (board) => {
+    const originalBoard = JSON.parse(JSON.stringify(board));
+  };
+
+  function publicSolveSudoku(playerBoard) {
+    return isGameSolved(playerBoard, originalBoard);
+
+  }
+
+  const isGameSolved = (playerBoard, originalBoard) => {
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        if (playerBoard[i][j] !== originalBoard[i][j]) {
+          return false; // Mismatch found
+        }
+      }
+    }
+    return true; // Boards match
+  };
+
   function removeNumbers(board, removeCount) {
     while (removeCount > 0) {
       const row = Math.floor(Math.random() * 9);
