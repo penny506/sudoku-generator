@@ -7,6 +7,23 @@
   cursor: pointer;
 }
 
+/* Make the 3x3 sections stand out */
+.cell:nth-child(3n) {
+  border-right: 2px solid black; /* Thicker right borders for 3x3 sections */
+}
+
+.row:nth-child(3n) .cell {
+  border-bottom: 2px solid black; /* Thicker bottom borders for 3x3 sections */
+}
+
+.cell:nth-child(1) {
+  border-left: 2px solid black; /* Thicker left borders for 3x3 sections */
+}
+
+.row:nth-child(1) .cell {
+  border-top: 2px solid black; /* Thicker top borders for 3x3 sections */
+}
+
 .cell:read-only {
   background-color: #f0f0f0;
 }
