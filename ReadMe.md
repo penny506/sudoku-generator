@@ -8,4 +8,4 @@ cd frontend
 npm start
 
 Sample UI:
-<img width="456" alt="image" src="![Sudoku Puzzle](image.png) />
+ [Sudoku Puzzle](image.png)
