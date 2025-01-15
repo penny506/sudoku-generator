@@ -1,0 +1,17 @@
+.cell {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  font-size: 18px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.cell:read-only {
+  background-color: #f0f0f0;
+}
+
+.cell.highlight {
+  background-color: #ffeb3b; /* Yellow highlight */
+  border-color: #fbc02d;
+}
