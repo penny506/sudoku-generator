@@ -11,4 +11,37 @@
     margin-left: 10px;
     padding: 5px 10px;
   }
+  .solved {
+    color:crimson;    
+  }
+
+  .fade-red {
+    background-color: red;
+    transition: background-color 3s;
+  }
+
+  .highlighted-cell {
+    background-color: lightgreen;
+    animation: fadeHighlight 1.5s infinite alternate;
+  }
   
+  @keyframes fadeHighlight {
+    from {
+      background-color: lightgreen;
+    }
+    to {
+      background-color: white;
+    }
+  }
+
+  .stats {
+    visibility: hidden;
+    display: none;
+  }
+  
+  .showstats {
+    visibility: visible;
+    display: block;
+    background-color: #f31ca8;
+    animation: fadeHighlight 1.5s ease-out alternate;
+  }

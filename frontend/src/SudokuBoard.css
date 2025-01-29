@@ -7,6 +7,13 @@
   cursor: pointer;
 }
 
+.gap {
+  width: 40px;
+  height: 10px;
+  border: 1px solid #ccc;
+
+}
+
 /* Make the 3x3 sections stand out */
 .cell:nth-child(3n) {
   border-right: 2px solid black; /* Thicker right borders for 3x3 sections */
@@ -31,4 +38,19 @@
 .cell.highlight {
   background-color: #ffeb3b; /* Yellow highlight */
   border-color: #fbc02d;
+}
+
+.get-stats-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4caf50; /* Green */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.get-stats-button:hover {
+  background-color: #45a049; /* Darker green */
 }
