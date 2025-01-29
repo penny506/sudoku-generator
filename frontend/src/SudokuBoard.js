@@ -2,9 +2,11 @@ import React, { useState, useEffect  } from 'react';
 import './SudokuBoard.css';
 // puzzle : Original State of the Board at beginning of game (static)
 // board : Latest state of the Board during gameplay with selections
-const SudokuBoard = ({ puzzle }) => {
+const SudokuBoard = ({ puzzle, originalBoard, updateBoard }) => {
   const [selectedNumber, setSelectedNumber] = useState(null);
   const [board, setBoard] = useState([]);
+  const [highlightedCells, setHighlightedCells] = useState(new Set());
+
 
   // Initialize the board with the puzzle
   useEffect(() => {
@@ -12,7 +14,7 @@ const SudokuBoard = ({ puzzle }) => {
   }, [puzzle]);
 
   const handleCellClick = (value) => {
-    console.log("Cell value " + value);
+    console.debug("Cell value " + value);
     if (value !== 0) {
       // Toggle highlight: un-highlight if already selected
       setSelectedNumber(selectedNumber === value ? null : value);
@@ -23,8 +25,8 @@ const SudokuBoard = ({ puzzle }) => {
 
   const handleInputChange = (e, rowIndex, colIndex) => {
     const inputValue = e.target.value;
-    //console.log(e);
-    console.log("I entered a number " + inputValue + " at position:" + rowIndex + ":" + colIndex);  
+    //console.debug(e);
+    console.debug("I entered a number " + inputValue + " at position:" + rowIndex + ":" + colIndex);  
     // Ensure only digits 1-9 can be entered
     if (/^[1-9]?$/.test(inputValue)) {
       const updatedBoard = board.map((row, rIdx) =>
@@ -33,11 +35,12 @@ const SudokuBoard = ({ puzzle }) => {
         )
       );
       setBoard(updatedBoard);
-      console.log(updatedBoard)
+      updateBoard(updatedBoard);
+      //console.debug(updatedBoard)
       e.readOnly=false;
     } else{
       // if they hit 'delete'?
-      console.log(e)
+      console.debug(e)
     }
   };
 
@@ -53,13 +56,18 @@ const SudokuBoard = ({ puzzle }) => {
               maxLength="1"
               value={cell !== 0 ? cell : ''}
               readOnly={cell !== 0 && board[rowIndex][colIndex] === puzzle[rowIndex][colIndex]}  
-              className={`cell ${cell === selectedNumber ? 'highlight' : ''}`}
+              className={`cell 
+                ${cell === selectedNumber ? 'highlight' : ''} 
+                ${highlightedCells.has(`${rowIndex}-${colIndex}`) ? 'highlighted-cell' : ''}`}
               onClick={() => handleCellClick(cell)}
             />
           ))}
+          
         </div>
+        
       ))}
-    </div>
+      
+    </div> 
   );
 };
 

@@ -7,5 +7,9 @@ node index.js
 cd frontend
 npm start
 
+Start all at once:
+npm run dev
+
+
 Sample UI:
  [Sudoku Puzzle](image.png)
