@@ -1,25 +1,61 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import SudokuBoard from './SudokuBoard';
+import SudokuBoard from './SudokuBoard'; 
+import SudokuStats from './SudokuStats';
 import './App.css';
 
 function App() {
   const [puzzle, setPuzzle] = useState([]);
   const [difficulty, setDifficulty] = useState('easy');
+  const [board, setBoard] = useState([]);
+  const [validated, setValidated] = useState(false);
+  const [isValidationRed, setIsValidationRed] = useState(false);
+
+  const handleValidate = () => {
+    validate(difficulty, puzzle, board).then((validated) => {
+      // Trigger the red fade effect
+      setIsValidationRed(true);
+      console.debug("Validated: " + validated);
+      // Remove the effect after 3 seconds
+      setTimeout(() => {
+        setIsValidationRed(false);
+      }, 3000);
+    });
+  }
+
+  const updateBoard = (newBoard) => {
+    console.debug("Appjs Updating the board" + newBoard);
+    setBoard(newBoard);
+  }
 
   const fetchPuzzle = async (level) => {
     try {
-      const response = await axios.get(`http://localhost:3001/sudoku?difficulty=${level}`);
+      const response = await axios.get(`http://localhost:2999/sudoku?difficulty=${level}`);
       setPuzzle(response.data.puzzle);
+      setValidated(false);// reset the validation in case a game was previously solved
     } catch (error) {
       console.error('Error fetching puzzle:', error);
     }
   };
 
-  useEffect(() => {
-    fetchPuzzle(difficulty);
-  }, [difficulty]);
+  const validate = async (level,board, puzzle) => {
 
+    console.debug("Validating the board" + board);
+    try {
+      const response = await axios.get(`http://localhost:2999/validate?difficulty=${level}&originalBoard=${board}&solvedBoard=${puzzle}`);
+      setValidated(response.data.validated);
+    } catch (error) {
+      console.error('Error fetching Validation:', error);
+    }
+  }
+
+
+
+  useEffect(() => {
+      }, [difficulty]);
+
+ 
+  
   return (
     <div className="App">
       <h1>Sudoku Game</h1>
@@ -32,7 +68,22 @@ function App() {
         </select>
         <button onClick={() => fetchPuzzle(difficulty)}>Generate Puzzle</button>
       </div>
-      <SudokuBoard puzzle={puzzle} />
+      <SudokuBoard puzzle={puzzle} originalBoard={board} updateBoard={updateBoard} /> 
+      <div className='gap'></div>
+      { !validated && (
+          <button
+          className={isValidationRed ? "fade-red" : ""}
+          onClick={handleValidate}
+        >
+          Validate
+        </button>
+
+        )}
+        { validated && (
+          <h2 className='solved'>Game Solved!</h2> 
+        )}
+        <div className="gap"></div>
+      <SudokuStats />
     </div>
   );
 }
