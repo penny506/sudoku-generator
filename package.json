@@ -4,7 +4,7 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "vitest --config config/vite.config.ts",
+    "test": "vitest",
     "frontend": "cd frontend && npm start",
     "backend": "cd backend && cd src && node index.js",
     "dev": "concurrently \"npm run frontend\" \"npm run backend\""
