@@ -10,6 +10,8 @@ npm start
 Start all at once:
 npm run dev
 
+Testing:
+npm run test
 
 Sample UI:
  [Sudoku Puzzle](image.png)
