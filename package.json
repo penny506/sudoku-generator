@@ -1,11 +1,12 @@
 {
   "name": "sudoku-generator",
   "version": "1.0.1",
+  "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "vitest",
+    "test": "vitest --config config/vite.config.ts",
     "frontend": "cd frontend && npm start",
-    "backend": "cd backend && node index.js",
+    "backend": "cd backend && cd src && node index.js",
     "dev": "concurrently \"npm run frontend\" \"npm run backend\""
   },
   "keywords": [],

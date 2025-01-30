@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { generateSudoku,validateBoard, getStats } = require('./sudoku');
+const { generateSudoku,validateBoard, getStats } = require('./services/sudoku');
 const { get } = require('http');
 
 const app = express();
