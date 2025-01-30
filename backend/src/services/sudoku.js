@@ -101,6 +101,23 @@ function isSafe(board, row, col, num) {
     return trueFalse;
   }
 
+  // function publicSolveSudoku(playerBoard) {
+  //   console.debug("Solving the board against " + sharedSolutionMap);
+  //   return isGameSolved(playerBoard, sharedSolutionMap);
+
+  // }
+
+  // const isGameSolved = (playerBoard, sharedSolutionMap) => {
+  //   for (let i = 0; i < 9; i++) {
+  //     for (let j = 0; j < 9; j++) {
+  //       if (playerBoard[i][j] !== sharedSolutionMap[i][j]) {
+  //         return false; // Mismatch found
+  //       }
+  //     }
+  //   }
+  //   return true; // Boards match
+  // };
+
   function removeNumbers(board, removeCount) {
     while (removeCount > 0) {
       const row = Math.floor(Math.random() * 9);
