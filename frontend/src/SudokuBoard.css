@@ -54,3 +54,21 @@
 .get-stats-button:hover {
   background-color: #45a049; /* Darker green */
 }
+
+@keyframes glow {
+  0% { background-color: #b3ffab; }
+  50% { background-color: #66ff66; }
+  100% { background-color: #b3ffab; }
+}
+
+.animate-row {
+  animation: glow 1s ease-in-out;
+}
+
+.animate-column {
+  animation: glow 1s ease-in-out;
+}
+
+.animate-square {
+  animation: glow 1s ease-in-out;
+}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { fetchPuzzle, validate } from './hooks/backendAPI';
 import SudokuBoard from './SudokuBoard'; 
 import SudokuStats from './SudokuStats';
 import './App.css';
@@ -12,7 +12,7 @@ function App() {
   const [isValidationRed, setIsValidationRed] = useState(false);
 
   const handleValidate = () => {
-    validate(difficulty, puzzle, board).then((validated) => {
+    validateHelper(difficulty, puzzle, board).then((validated) => {
       // Trigger the red fade effect
       setIsValidationRed(true);
       console.debug("Validated: " + validated);
@@ -28,28 +28,23 @@ function App() {
     setBoard(newBoard);
   }
 
-  const fetchPuzzle = async (level) => {
+  const validateHelper = async (level, board, puzzle) => {
     try {
-      const response = await axios.get(`http://localhost:2999/sudoku?difficulty=${level}`);
+      const response = await validate(level, board, puzzle);
+      setValidated(response.data.validated);
+    } catch (error) {
+      console.error('Error fetching validation:', error);
+    }
+  }
+  const fetchPuzzleHelper = async (level) => {
+    try {
+      const response = await fetchPuzzle(level);
       setPuzzle(response.data.puzzle);
-      setValidated(false);// reset the validation in case a game was previously solved
+      setValidated(false);
     } catch (error) {
       console.error('Error fetching puzzle:', error);
     }
-  };
-
-  const validate = async (level,board, puzzle) => {
-
-    console.debug("Validating the board" + board);
-    try {
-      const response = await axios.get(`http://localhost:2999/validate?difficulty=${level}&originalBoard=${board}&solvedBoard=${puzzle}`);
-      setValidated(response.data.validated);
-    } catch (error) {
-      console.error('Error fetching Validation:', error);
-    }
   }
-
-
 
   useEffect(() => {
       }, [difficulty]);
@@ -66,7 +61,7 @@ function App() {
           <option value="medium">Medium</option>
           <option value="hard">Hard</option>
         </select>
-        <button onClick={() => fetchPuzzle(difficulty)}>Generate Puzzle</button>
+        <button onClick={() => fetchPuzzleHelper(difficulty)}>Generate Puzzle</button>
       </div>
       <SudokuBoard puzzle={puzzle} originalBoard={board} updateBoard={updateBoard} /> 
       <div className='gap'></div>
