@@ -1,5 +1,60 @@
+// PuzzleBoard = SOLVED Board 
+// OriginalBoard = Original Board with values removed
+
 let sharedSolutionMap = new Map();// SHARED DATA ARRAY of Original Board Maps
 let sharedSolvedMap = new Map();// store the solved boards
+
+String.prototype.toSudoku = function () {
+  // Check if the string contains commas
+  const puzzleBoardArray = this.includes(',')
+    ? this.split(',').map(Number)  // If commas exist, split by ',' and convert to numbers
+    : this.split('').map(Number);  // If no commas, split each character and convert to numbers
+
+  return Array.from({ length: 9 }, (_, i) =>
+    puzzleBoardArray.slice(i * 9, i * 9 + 9)
+  );
+};
+
+function checkCompletion(originalBoard, board, row, col) {
+  console.debug("Original Board is " + originalBoard);
+  console.debug("Board is " + board);
+  console.debug("Row is " + row);
+  console.debug("Col is " + col);
+  const { isRowComplete, isColComplete, isSquareComplete, startRow, startCol } = checkCompletionHelper(originalBoard, board, row, col);
+  return { isRowComplete:isRowComplete, isColComplete:isColComplete, isSquareComplete:isSquareComplete, startRow:startRow, startCol:startCol };
+}
+
+function checkCompletionHelper(originalBoard, solvedBoard, row, col) {
+  // now I have the Original Board, I need to Look up by VALUE in the Map, find it and store it as originalBoard for this call
+  const foundKey = [...sharedSolutionMap.entries()].find(([key, value]) => value === originalBoard)?.[0];
+  console.debug("Found Key is " + foundKey);
+  const puzzleBoard = foundKey;
+
+  // Now I must convert the lists to a 2D array
+  const puzzleBoardArray = puzzleBoard.toSudoku();
+  const solvedBoardArray = solvedBoard.toSudoku();
+  const originalBoardArray = originalBoard.toSudoku();
+
+  console.debug("puzzleBoard Board is " + typeof puzzleBoardArray);
+  const isRowComplete = solvedBoardArray[row].every((num, i) => num === puzzleBoardArray[row][i]);
+  const isColComplete = solvedBoardArray.every((_, rowIndex) => solvedBoardArray[rowIndex][col] === puzzleBoardArray[rowIndex][col]);
+  
+  const startRow = Math.floor(row / 3) * 3;
+  const startCol = Math.floor(col / 3) * 3;
+  
+  const isSquareComplete = (() => {
+    for (let i = startRow; i < startRow + 3; i++) {
+      for (let j = startCol; j < startCol + 3; j++) {
+        if (solvedBoardArray[i][j] !== puzzleBoardArray[i][j]) {
+          return false; // Exit early if any number is incorrect
+        }
+      }
+    }
+    return true; // All numbers match correctly
+  })();
+  
+    return { isRowComplete, isColComplete, isSquareComplete, startRow, startCol };
+};
 
 function isSafe(board, row, col, num) {
     for (let x = 0; x < 9; x++) {
@@ -147,5 +202,5 @@ function isSafe(board, row, col, num) {
     };
   }
   
-  module.exports = { generateSudoku, validateBoard, getStats };
+  module.exports = { generateSudoku, validateBoard, getStats, checkCompletion };
   

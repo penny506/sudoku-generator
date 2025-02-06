@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { generateSudoku,validateBoard, getStats } = require('./services/sudoku');
+const { generateSudoku,validateBoard, getStats, checkCompletion } = require('./services/sudoku');
 const { get } = require('http');
 
 const app = express();
@@ -12,6 +12,16 @@ app.get('/sudoku', (req, res) => {
   const difficulty = req.query.difficulty || 'easy';
   const puzzle = generateSudoku(difficulty);
   res.json({ difficulty, puzzle });
+});
+
+app.get('/checkCompletion', (req, res) => {
+  const originalBoard = req.query.originalBoard.replaceAll(',', '') || [];
+  const solvedBoard = req.query.solvedBoard.replaceAll(',', '') || [];
+  const row = req.query.row || 0;
+  const col = req.query.col || 0;
+  
+  const response = checkCompletion(originalBoard, solvedBoard, row, col);  
+  res.json(response);
 });
 
 app.get('/validate', (req, res) => {
