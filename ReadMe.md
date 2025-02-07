@@ -15,3 +15,5 @@ npm run test
 
 Sample UI:
  [Sudoku Puzzle](image.png)
+
+<img width="618" alt="image" src="https://github.com/user-attachments/assets/97592f95-ea1a-4535-8bbe-61a1ac7f8769" />
