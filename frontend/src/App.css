@@ -1,7 +1,12 @@
+
 .App {
-    text-align: center;
-    margin-top: 20px;
-  }
+  justify-content: center; /* Centers horizontally */
+  align-items: center;     /* Centers vertically */
+  height: 100vh;           /* Takes full viewport height */
+  text-align: center;
+  max-width: 600px;
+  margin: auto;            /* Centers horizontally in case flexbox fails */
+}
   
   .controls {
     margin-bottom: 20px;
@@ -19,6 +24,7 @@
     background-color: red;
     transition: background-color 3s;
   }
+
 
   .highlighted-cell {
     background-color: lightgreen;
@@ -42,6 +48,4 @@
   .showstats {
     visibility: visible;
     display: block;
-    background-color: #949494;
-    animation: fadeHighlight 1.5s ease-in;
   }

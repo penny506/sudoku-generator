@@ -4,7 +4,7 @@ import axios from 'axios';
 const SudokuStats = () => {
     
     const [stats, setStats] = useState({ totalBoards: 0, solvedBoards: 0 }); // Default values
-    const [showStats, setShowStats] = useState(true);
+    const [showStats, setShowStats] = useState(false);
 
     const toggleStats = () => {
       setShowStats((prevState) => !prevState); // Toggle the state
@@ -31,10 +31,9 @@ const SudokuStats = () => {
 
             
             <div> 
-                <button onClick={getStats}> {showStats ? "Hide Stats" : "Show Stats"}</button>
-                <div className={`stats ${showStats ? "showstats" : ""}`}>
+                 <div className={`stats ${showStats ? "showstats" : ""}`}>
                     
-                    <h2>Sudoku Stats</h2>
+                    
                     <p>Total Boards: {stats.totalBoards}</p>
                     <p>Solved Boards: {stats.solvedBoards}</p>
 

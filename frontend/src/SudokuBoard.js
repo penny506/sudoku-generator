@@ -4,7 +4,7 @@ import { remotecheckCompletion } from './hooks/backendAPI';
 import './SudokuBoard.css';
 // puzzle : Original State of the Board at beginning of game (static)
 // board : Latest state of the Board during gameplay with selections
-const SudokuBoard = ({ puzzle, originalBoard, updateBoard }) => {
+const SudokuBoard = ({ puzzle, originalBoard, updateBoard, isValidationRed }) => {
   const [selectedNumber, setSelectedNumber] = useState(null);
   const [board, setBoard] = useState([]);
   const [highlightedCells] = useState(new Set());
@@ -88,29 +88,37 @@ const animateSquare = (startRow, startCol) => {
 };
 
   return (
-    <div className="board">
-      {board.map((row, rowIndex) => (
-        <div key={rowIndex} className="row">
-          {row.map((cell, colIndex) => (
-            <input
-              key={`${rowIndex}-${colIndex}`}
-              type="text"              
-              onChange={(e) => handleInputChange(e, rowIndex, colIndex)}
-              maxLength="1"
-              value={cell !== 0 ? cell : ''}
-              readOnly={cell !== 0 && board[rowIndex][colIndex] === puzzle[rowIndex][colIndex]}  
-              className={`cell 
-                ${cell === selectedNumber ? 'highlight' : ''} 
-                ${highlightedCells.has(`${rowIndex}-${colIndex}`) ? 'highlighted-cell' : ''}`}
-              onClick={() => handleCellClick(cell)}
-            />
-          ))}
-          
-        </div>
-        
-      ))}
+    <div className="board-container" style={{ position: "relative" }}>
+      {isValidationRed && <div className="fade-red-overlay">X</div>} {/* Large 'X' overlay */}
       
-    </div> 
+    
+      <div className="board">
+
+        {board.map((row, rowIndex) => (
+
+          <div key={rowIndex} className="row">
+            
+            {row.map((cell, colIndex) => (
+              <input
+                key={`${rowIndex}-${colIndex}`}
+                type="text"              
+                onChange={(e) => handleInputChange(e, rowIndex, colIndex)}
+                maxLength="1"
+                value={cell !== 0 ? cell : ''}
+                readOnly={cell !== 0 && board[rowIndex][colIndex] === puzzle[rowIndex][colIndex]}  
+                className={`cell 
+                  ${cell === selectedNumber ? 'highlight' : ''} 
+                  ${highlightedCells.has(`${rowIndex}-${colIndex}`) ? 'highlighted-cell' : ''}`}
+                onClick={() => handleCellClick(cell)}
+              />
+            ))}
+            
+          </div>
+          
+        ))}
+        
+      </div> 
+    </div>
   );
 };
 
