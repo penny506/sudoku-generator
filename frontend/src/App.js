@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { fetchPuzzle, validate } from './hooks/backendAPI';
 import SudokuBoard from './SudokuBoard'; 
 import SudokuStats from './SudokuStats';
+import { Button } from 'primereact/button';
+
+import { Dialog } from "primereact/dialog";
+// TODO: Complete this
+// import { Toolbar } from 'primereact/toolbar';
+import { Menubar } from 'primereact/menubar';
 import './App.css';
 
 function App() {
@@ -10,7 +16,8 @@ function App() {
   const [board, setBoard] = useState([]);
   const [validated, setValidated] = useState(false);
   const [isValidationRed, setIsValidationRed] = useState(false);
-
+  const [showStats, setShowStats] = useState(false);
+  
   const handleValidate = () => {
     validateHelper(difficulty, puzzle, board).then((validated) => {
       // Trigger the red fade effect
@@ -36,6 +43,7 @@ function App() {
       console.error('Error fetching validation:', error);
     }
   }
+
   const fetchPuzzleHelper = async (level) => {
     try {
       const response = await fetchPuzzle(level);
@@ -48,37 +56,58 @@ function App() {
 
   useEffect(() => {
       }, [difficulty]);
-
- 
   
+      const difficultyLevels = [
+        { label: "Easy", value: "easy" },
+        { label: "Medium", value: "medium" },
+        { label: "Hard", value: "hard" }
+      ];
+      
+      const items = [
+        {
+          label: "Choose Difficulty Level",
+          icon: "pi pi-sliders-h",
+          items: difficultyLevels.map((level) => ({
+            label: level.label,
+            command: () => fetchPuzzleHelper(setDifficulty(level.value)),
+          })),
+        },
+        {
+          label: "Validate",
+          icon: "pi pi-check",
+          command: handleValidate,
+        },
+        {
+          label: "View Stats",
+          icon: "pi pi-chart-bar",
+          command: () => setShowStats(true), // Opens the Stats dialog
+        }
+    ];
+
   return (
     <div className="App">
-      <h1>Sudoku Game</h1>
-      <div className="controls">
-        <label>Difficulty: </label>
-        <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
-        </select>
-        <button onClick={() => fetchPuzzleHelper(difficulty)}>Generate Puzzle</button>
-      </div>
-      <SudokuBoard puzzle={puzzle} originalBoard={board} updateBoard={updateBoard} /> 
-      <div className='gap'></div>
-      { !validated && (
-          <button
-          className={isValidationRed ? "fade-red" : ""}
-          onClick={handleValidate}
-        >
-          Validate
-        </button>
+      <h1>Sudoku Game</h1> 
+      <div className="card" icon=" pi-align-center">
+            <Menubar model={items} />
+             {/* SudokuStats Dialog */}
+            <Dialog header="Sudoku Stats" visible={showStats} style={{ width: '50vw' }} onHide={() => setShowStats(false)}>
+              <SudokuStats /> {/* Render your SudokuStats component inside the dialog */}
+            </Dialog>
+        </div>
 
-        )}
+ 
+          
+      <div className="gap"></div>
+         
+        
+      <SudokuBoard puzzle={puzzle} originalBoard={board} updateBoard={updateBoard} isValidationRed={isValidationRed}/> 
+      
+      <div className='gap'></div>
         { validated && (
-          <h2 className='solved'>Game Solved!</h2> 
+            <h2 className='solved'>Game Solved!</h2> 
         )}
+      
         <div className="gap"></div>
-      <SudokuStats />
     </div>
   );
 }
