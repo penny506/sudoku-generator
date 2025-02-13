@@ -26,4 +26,4 @@ npm run test
 
 <img width="618" alt="image" src="https://github.com/user-attachments/assets/97592f95-ea1a-4535-8bbe-61a1ac7f8769" />
 <img width="618" alt="image" src="https://github.com/user-attachments/assets/d6d5d6fb-0703-4fa1-9aaa-5470b3efb333" />
-
+<img width="761" alt="Winning!" src="https://github.com/user-attachments/assets/da4d3d83-bccd-4d61-b030-c29d1123727e" />
