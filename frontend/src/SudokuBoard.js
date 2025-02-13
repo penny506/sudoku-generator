@@ -4,7 +4,7 @@ import { remotecheckCompletion } from './hooks/backendAPI';
 import './SudokuBoard.css';
 // puzzle : Original State of the Board at beginning of game (static)
 // board : Latest state of the Board during gameplay with selections
-const SudokuBoard = ({ puzzle, originalBoard, updateBoard, isValidationRed }) => {
+const SudokuBoard = ({ puzzle, originalBoard, updateBoard, isValidationRed, isValidationGreen }) => {
   const [selectedNumber, setSelectedNumber] = useState(null);
   const [board, setBoard] = useState([]);
   const [highlightedCells] = useState(new Set());
@@ -90,7 +90,7 @@ const animateSquare = (startRow, startCol) => {
   return (
     <div className="board-container" style={{ position: "relative" }}>
       {isValidationRed && <div className="fade-red-overlay">X</div>} {/* Large 'X' overlay */}
-      
+      {isValidationGreen && <div className="fade-green-overlay">✓</div>} {/* Large 'Check' overlay */}
     
       <div className="board">
 

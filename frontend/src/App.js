@@ -16,17 +16,28 @@ function App() {
   const [board, setBoard] = useState([]);
   const [validated, setValidated] = useState(false);
   const [isValidationRed, setIsValidationRed] = useState(false);
+  const [isValidationGreen, setIsValidationGreen] = useState(false);
   const [showStats, setShowStats] = useState(false);
   
   const handleValidate = () => {
-    validateHelper(difficulty, puzzle, board).then((validated) => {
-      // Trigger the red fade effect
-      setIsValidationRed(true);
-      console.debug("Validated: " + validated);
-      // Remove the effect after 3 seconds
-      setTimeout(() => {
-        setIsValidationRed(false);
-      }, 3000);
+    validateHelper(difficulty, puzzle, board).then((result) => {
+      console.debug("Validated: " + result);
+      // Trigger the red fade effect IF the reuslt is false
+      if(!result){
+        setIsValidationRed(true);
+        // Remove the effect after 3 seconds
+        setTimeout(() => {
+          setIsValidationRed(false);
+        }, 3000);
+      }
+      else{
+        // YOU WON!
+        setIsValidationGreen(true);
+        setTimeout(() => {
+          setIsValidationGreen(false);
+        }, 3000);
+
+      }
     });
   }
 
@@ -39,12 +50,14 @@ function App() {
     try {
       const response = await validate(level, board, puzzle);
       setValidated(response.data.validated);
+      return response.data.validated;
     } catch (error) {
       console.error('Error fetching validation:', error);
     }
   }
 
   const fetchPuzzleHelper = async (level) => {
+    setDifficulty(level.value)
     try {
       const response = await fetchPuzzle(level);
       setPuzzle(response.data.puzzle);
@@ -69,7 +82,7 @@ function App() {
           icon: "pi pi-sliders-h",
           items: difficultyLevels.map((level) => ({
             label: level.label,
-            command: () => fetchPuzzleHelper(setDifficulty(level.value)),
+            command: () => fetchPuzzleHelper(level.value),
           })),
         },
         {
@@ -100,7 +113,7 @@ function App() {
       <div className="gap"></div>
          
         
-      <SudokuBoard puzzle={puzzle} originalBoard={board} updateBoard={updateBoard} isValidationRed={isValidationRed}/> 
+      <SudokuBoard puzzle={puzzle} originalBoard={board} updateBoard={updateBoard} isValidationRed={isValidationRed} isValidationGreen={isValidationGreen}/> 
       
       <div className='gap'></div>
         { validated && (
